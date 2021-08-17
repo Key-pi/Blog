@@ -1,0 +1,36 @@
+body {
+    background-image: url("../img/ignasi_pattern_s.png");
+}
+
+.wrap {
+    background-color: white;
+}
+
+.footer{
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #343a40;
+    padding: 0px;
+    z-index: 1111;
+}
+
+
+.carousel-item.block.w-100 {
+    height:683px;object-fit: contain;
+}
+
+/*.carousel-indicators {*/
+/*    background-color: #0000cc;*/
+/*    color-rendering: auto;*/
+/*}*/
+
+
+
+
+.carousel-indicators li{
+    background-color: #04a900 ;
+}
+.carousel-indicators li::after {
+    background-color: #43408c;
+}

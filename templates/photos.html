@@ -1,0 +1,16 @@
+<table id="gallery" class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Photo</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for photo in photos %}
+      <tr>
+        <td><a href="{{ photo.file_field.url }}">{{ photo.file_field.name }}</a></td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+

@@ -1,0 +1,20 @@
+{% load crispy_forms_filters %}
+{% load form_tags widget_tweaks %}
+{% load crispy_forms_tags%}
+
+
+{% load crispy_forms_tags %}
+{#<div class="text-center">#}
+{#<form method="post" >#}
+{##}
+{#    <p class="mb-2">{{ form|crispy }}</p>#}
+{#</form>#}
+{#    </div>#}
+
+
+<div>
+    {% for field in form %}
+    {{ field|as_crispy_field }}
+
+    {% endfor %}
+</div>

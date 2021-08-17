@@ -1,0 +1,201 @@
+{#{% extends 'base.html' %}#}
+{##}
+{#{% block breadcrumb %}#}
+{#  <li class="breadcrumb-item active">Boards</li>#}
+{#{% endblock %}#}
+{##}
+{#{% block content %}#}
+{#  <table class="table">#}
+{#    <thead class="thead-dark">#}
+{#      <tr>#}
+{#        <th>Board</th>#}
+{#        <th>Posts</th>#}
+{#        <th>Topics</th>#}
+{#        <th>Last Post</th>#}
+{#      </tr>#}
+{#    </thead>#}
+{#    <tbody>#}
+{#      {% for board in boards %}#}
+{#        <tr>#}
+{#          <td>#}
+{#            <a href="{% url 'boards:board_topics' board.pk %}">{{ board.name }}</a>#}
+{#            <small class="text-muted d-block">{{ board.description }}</small>#}
+{#          </td>#}
+{#          <td class="align-middle">#}
+{#            {{ board.get_posts_count }}#}
+{#          </td>#}
+{#          <td class="align-middle">#}
+{#            {{ board.topics.count }}#}
+{#          </td>#}
+{#          <td class="align-middle">#}
+{#           {% with post=board.get_last_post %}#}
+{#             {% if post %}#}
+{#               <small>#}
+{#                 <a href="{% url 'boards:topic_posts' board.pk post.topic.pk %}">#}
+{#                   By {{ post.created_by.username }} at {{ post.created_at }}#}
+{#                 </a>#}
+{#               </small>#}
+{#             {% else %}#}
+{#               <small class="text-muted">#}
+{#                 <em>No posts yet.</em>#}
+{#             </small>#}
+{#             {% endif %}#}
+{#           {% endwith %}#}
+{#          </td>#}
+{#        </tr>#}
+{#      {% endfor %}#}
+{#    </tbody>#}
+{#  </table>#}
+{#{% endblock %}#}
+
+
+
+
+
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item active">Boards</li>
+{% endblock %}
+
+
+{% block content %}
+
+  {% if user.is_authenticated %}
+    {% if user.blogger_user.is_super_user %}
+        <p>
+       <button type="button"
+            class="btn btn-primary js-create-board"
+            data-url="{% url 'boards:board_create' %}">
+            <span class="glyphicon glyphicon-plus"></span>
+            New Board
+        </button>
+        </p>
+
+ <button type="button" class="btn btn-primary mb-1" data-toggle="modal" data-target="#exampleModalLong">
+  Last changes
+</button>
+<!-- Modal -->
+<div   class="modal fade bd-example-modal-lg" id="exampleModalLong" tabindex="-1" role="dialog"  aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div style="width: 1000px;" class="modal-body p-3 mb-2 bg-white text-dark" id="modal_actions">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Last changes</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body " >
+          <table class="table ">
+
+             <thead class="thead-dark">
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Change</th>
+                  <th scope="col">Date</th>
+                  <th scope="col">User</th>
+                </tr>
+          </thead>
+
+           <tbody>
+                {% for hinfo in history %}
+                <tr>
+                  <th>{{ hinfo.name }}</th>
+                  <td>{{ hinfo.description }}</td>
+                {%if hinfo.history_type == '~' %}
+                  <td>Update</td>
+                {%elif hinfo.history_type == '+'%}
+                  <td>Create</td>
+                {%elif hinfo.history_type == '-'%}
+                  <td>Delete</td>
+                {%endif%}
+                  <td>{{ hinfo.history_date }}</td>
+                  <td>{{ hinfo.history_user }}</td>
+                </tr>
+                {% endfor %}
+           </tbody>
+          </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    {% endif %}
+  {% endif %}
+  <table class="table" id="board-table">
+    <thead class="thead-dark">
+      <tr>
+        <th>Board</th>
+        <th>Posts</th>
+        <th>Topics</th>
+        <th>Last Post</th>
+          {% if user.is_authenticated %}
+            {% if user.blogger_user.is_super_user %}
+        <th>Update Board</th>
+        <th>Delete Board</th>
+
+          {% endif %}
+          {% endif %}
+
+
+      </tr>
+    </thead>
+    <tbody class="infinite-container">
+    {% include 'includes/partial_board.html' %}
+    </tbody>
+{% if page_obj.has_next %}
+             <a class="infinite-more-link" href="?page={{ page_obj.next_page_number }}"></a>
+         {% endif %}
+         <div class="d-flex justify-content-center" style="display:none;">
+             <div class="spinner-border" role="status">
+                 <span class="sr-only">Loading...</span>
+             </div>
+         </div>
+
+ <div class="modal fade" id="modal-board">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        {% block modal %}
+            {% endblock %}
+      </div>
+    </div>
+  </div>
+
+  </table>
+
+
+
+
+ <script src="/static/js/jquery-3.2.1.min.js"></script>
+    <script src="/static/js/jquery.waypoints.min.js"></script>
+    <script src="/static/js/infinite.min.js"></script>
+    <script src="/static/js/board.js"></script>
+    <script>
+
+    var infinite = new Waypoint.Infinite({
+        element: $('.infinite-container')[0],
+        handler: function(direction) {
+
+    },
+    offset: 'bottom-in-view',
+
+    onBeforePageLoad: function () {
+    $('.spinner-border').show();
+    },
+    onAfterPageLoad: function () {
+    $('.spinner-border').hide();
+    }
+
+    });
+
+    </script>
+
+
+{% endblock %}

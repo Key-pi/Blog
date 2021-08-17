@@ -1,0 +1,51 @@
+{% load crispy_forms_filters %}
+{% load form_tags widget_tweaks %}
+{% load crispy_forms_tags %}
+
+
+<div class="text-center">
+{{ form|crispy }}
+
+ </div>
+
+<div class="text-center">
+{{ form1|crispy }}
+</div>
+
+
+
+{#{% for field in form %}#}
+{##}
+{#  <div class="form-group">#}
+{#    {{ field.label_tag }}#}
+{#    {% render_field field class=field|input_class %}#}
+{#    {% for error in field.errors %}#}
+{#      <div class="invalid-feedback">#}
+{#        {{ error }}#}
+{#      </div>#}
+{#    {% endfor %}#}
+{#    {% if field.help_text %}#}
+{#      <small class="form-text text-muted">#}
+{#        {{ field.help_text|safe }}#}
+{#      </small>#}
+{#    {% endif %}#}
+{#  </div>#}
+{##}
+{#{% endfor %}#}
+{##}
+{#{% for field in form1.visible_fields  %}#}
+{#  <div class="form-group">#}
+{#    {{ field.label_tag }}#}
+{#    {% render_field field class=field|input_class %}#}
+{#    {% for error in field.errors %}#}
+{#      <div class="invalid-feedback">#}
+{#        {{ error }}#}
+{#      </div>#}
+{#    {% endfor %}#}
+{#    {% if field.help_text %}#}
+{#      <small class="form-text text-muted">#}
+{#        {{ field.help_text|safe }}#}
+{#      </small>#}
+{#    {% endif %}#}
+{#  </div>#}
+{#{% endfor %}#}
