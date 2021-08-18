@@ -36,8 +36,8 @@ html5lib==1.1
 idna==3.2
 iniconfig==1.1.1
 ipdb==0.13.9
-ipython==7.26.0
-ipython-genutils==0.2.0
+# ipython==7.26.0
+# ipython-genutils==0.2.0
 jedi==0.18.0
 kombu==5.1.0
 Markdown==3.3.4
