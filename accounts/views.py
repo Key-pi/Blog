@@ -163,6 +163,7 @@ class DetailProfile(DetailView):
 
 
 
+
 # def detail_profile(request, pk):
 #     if request.method == "POST":
 #         user = User.objects.get_object_or_404(pk=pk)

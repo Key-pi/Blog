@@ -19,6 +19,8 @@ from django.contrib.auth import views as auth_views
 from django.urls import include
 from django.urls import path
 from django.conf.urls.static import static
+from django.conf.urls import url
+from django.views.static import serve
 
 
 urlpatterns = [
@@ -31,10 +33,13 @@ urlpatterns = [
          ),
     path('pages/', include('django.contrib.flatpages.urls')),
     path('social-auth/', include('social_django.urls', namespace='social')),
+    url(r'^media/(?P<path>.*)$', serve,{'document_root': settings.MEDIA_ROOT}),
+    url(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}),
 
 ]
 
 if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # if settings.DEBUG:
